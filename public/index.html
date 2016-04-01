@@ -1,0 +1,39 @@
+<html ng-App="myApp">
+	<head>
+		<!-- cdns -->
+		<script src="https://ajax.googleapis.com/ajax/libs/	jquery/1.12.0/jquery.min.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+		<script src="controller/controller.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Checklist!</h1>
+			<table class="table" ng-controller="AppCtrl">
+			<tr>
+			<td><button class="btn btn-primary" ng-click="add()">Add!</td>
+				<td><input class="form-control" ng-model="list.task"></td>
+				
+				<td><button class="btn btn-secondary" ng-click="update(list._id)">Update!</button></td>
+			</tr>
+			<tr>
+				<td>Done</td>
+				<td>Task</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr ng-repeat="list in checklist">
+							<td class="col-md-4"><input class="toggle" type="checkbox" ng-model="list.done" ng-change="toggle(list)"></td>
+							<td class="col-md-4">{{list.task}}</td>
+							<td class="col-md-4"><button class="btn btn-warning" ng-click="edit(list)">EDT</button>
+							<button class="btn btn-warning" ng-click="del(list._id)">DEL</button></td>
+			</tr>
+		</div>
+	</body>
+</html>
