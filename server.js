@@ -1,21 +1,30 @@
 //dependecies
 var express= require ('express');
 var bodyparser= require ('body-parser');
+var mongoose = require ('mongoose');
 var mongojs = require ('mongojs');
+
 //dependencies
 
 //init
+mongoose.connect('mongodb://localhost:27017/checklist');
 var db=mongojs('checklist',['list']);
 var app=express();
 app.use(express.static(__dirname+"/public"));
 app.use(bodyparser.json());
 //init
+var Listschema = new mongoose.Schema({
+  task: String,
+  done: Boolean
+});
+
+var List = mongoose.model('list',Listschema,'list');
 
 //server actions
 	//insert todo here
-	app.get('/checklist',function(req,ress){
-		db.list.find(function (err,docs) {
-			ress.json(docs);
+	app.get('/checklist',function(req,res){
+		List.find(function (err,docs) {
+			res.json(docs);
 		});
 	});
 
@@ -23,25 +32,32 @@ app.use(bodyparser.json());
 		req.body.done=false;
 		delete req.body._id;
 		console.log(req.body);
-		db.list.insert(req.body);
-		db.list.find(function (err,docs) {
-			res.json(docs);
+		var newtodo=new List({
+			task: req.body.task,
+			done: req.body.done
 		});
-
+		newtodo.save(function (err, docs){
+			if (err) return err;
+			else console.log("saved"+docs);
+		})
 	});
+
 
 	app.delete('/delete/:id',function(req,res){
 		console.log(req.params.id);
-		db.list.remove({_id:mongojs.ObjectId(req.params.id)});
-		db.list.find(function (err,docs) {
+		List.find({_id:req.params.id}).remove().exec();
+		List.find(function (err,docs) {
 			res.json(docs);
-		});		
+		});
 	});
 	app.post('/update/:id',function(req,res){
 		var id=req.params.id;
 		delete req.body._id;
 		console.log(id);
-		db.list.update({_id:mongojs.ObjectId(id)},req.body,{upsert:true});
+		console.log(req.body);
+		List.update({_id:id},req.body,{upsert:false},function(err, docs){
+			console.log(docs+"inserted");
+		});
 		db.list.find(function (err,docs) {
 			res.json(docs);
 		});
@@ -49,7 +65,7 @@ app.use(bodyparser.json());
 
 	app.post('/edit/:id',function(req,res){
 		console.log(req.params.id);
-		db.list.findOne({_id:mongojs.ObjectId(req.params.id)},function (err,docs) {
+		List.findOne({_id:req.params.id},function (err,docs) {
 			res.json(docs);
 		});
 	});
@@ -57,7 +73,9 @@ app.use(bodyparser.json());
 	app.post('/toggle/:id',function(req,res){
 		console.log(req.body.done);
 		delete req.body._id;
-		db.list.update({_id:mongojs.ObjectId(req.params.id)},req.body,{upsert:true});
+		List.update({_id:req.params.id},req.body,{upsert:true},function(err, docs){
+			console.log(docs+"inserted");
+		});
 	});
 //server actions
 

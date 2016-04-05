@@ -20,14 +20,14 @@ myApp.controller('AppCtrl',['$scope','$http', function($scope, $http){
 	$scope.add= function ()
 	{
 		$http.post('/add',$scope.list);
-			refresh();		
+			refresh();
 	};
 
 	$scope.del= function(id)
 	{
 		$http.delete('/delete/'+id).then(function (res){
 			refresh();
-		});		
+		});
 	};
 
 	$scope.edit=function(list)
@@ -56,5 +56,5 @@ myApp.controller('AppCtrl',['$scope','$http', function($scope, $http){
 			refresh();
 		});
 	};
-	
+
 }]);
