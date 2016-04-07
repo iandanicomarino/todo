@@ -2,23 +2,21 @@
 var express= require ('express');
 var bodyparser= require ('body-parser');
 var mongoose = require ('mongoose');
-var mongojs = require ('mongojs');
-
 //dependencies
 
 //init
-mongoose.connect('mongodb://localhost:27017/checklist');
-var db=mongojs('checklist',['list']);
-var app=express();
-app.use(express.static(__dirname+"/public"));
-app.use(bodyparser.json());
-//init
+var settings =require ('./config/settings.js');
+var mongoose = require('mongoose');
 var Listschema = new mongoose.Schema({
   task: String,
   done: Boolean
 });
-
 var List = mongoose.model('list',Listschema,'list');
+
+var app=express();
+app.use(express.static(__dirname+"/public"));
+app.use(bodyparser.json());
+//init
 
 //server actions
 	//insert todo here
