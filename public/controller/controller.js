@@ -46,6 +46,7 @@ myApp.controller('AppCtrl',['$scope','$http', function($scope, $http){
 		$http.post('/update/'+id,$scope.list).then(function (res){
 			console.log(res.data);
 			refresh();
+			console.log("gothhere")
 		});
 	};
 

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
-var Listschema = new mongoose.Schema({
+var Listschema = mongoose.Schema({
   task: String,
   done: Boolean
 });
-var List = mongoose.model('list',Listschema,'list');
+module.exports = mongoose.model('list',Listschema,'list');
